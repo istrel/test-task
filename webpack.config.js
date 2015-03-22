@@ -19,7 +19,7 @@ module.exports = {
   devtool: false,
   entry: [
       'webpack/hot/only-dev-server',
-      './src/scripts/components/TestTaskApp.js'
+      './src/scripts/components/TestTaskApp.cjsx'
   ],
 
   stats: {
@@ -44,6 +44,14 @@ module.exports = {
       test: /\.js$/,
       exclude: /node_modules/,
       loader: 'react-hot!jsx-loader?harmony'
+    }, {
+      test: /\.cjsx$/,
+      exclude: /node_modules/,
+      loaders: ['react-hot', 'coffee', 'cjsx']
+    }, {
+      test: /\.coffee$/,
+      exclude: /node_modules/,
+      loader: 'coffee'
     }, {
       test: /\.styl/,
       loader: 'style-loader!css-loader!stylus-loader'

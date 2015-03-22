@@ -18,7 +18,7 @@ module.exports = {
 
   debug: false,
   devtool: false,
-  entry: './src/scripts/components/TestTaskApp.js',
+  entry: './src/scripts/components/TestTaskApp.cjsx',
 
   stats: {
     colors: true,
@@ -51,6 +51,14 @@ module.exports = {
       test: /\.js$/,
       exclude: /node_modules/,
       loader: 'jsx-loader?harmony'
+    }, {
+      test: /\.cjsx$/,
+      exclude: /node_modules/,
+      loaders: ['coffee', 'cjsx']
+    }, {
+      test: /\.coffee$/,
+      exclude: /node_modules/,
+      loader: 'coffee'
     }, {
       test: /\.css$/,
       loader: 'style-loader!css-loader'

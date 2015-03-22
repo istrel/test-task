@@ -10,6 +10,9 @@
   "mainInput": "TestTaskApp",
   "mainOutput": "main",
   "dependencies": {
+    "cjsx-loader": "^2.0.1",
+    "coffee-loader": "^0.7.2",
+    "coffee-script": "^1.9.1",
     "react": "~0.12.2"
   },
   "devDependencies": {

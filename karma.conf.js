@@ -8,10 +8,10 @@ module.exports = function (config) {
     frameworks: ['jasmine'],
     files: [
       'test/helpers/**/*.js',
-      'test/spec/components/**/*.js'
+      'test/spec/components/**/*.cjsx'
     ],
     preprocessors: {
-      'test/spec/components/**/*.js': ['webpack']
+      'test/spec/components/**/*.cjsx': ['webpack']
     },
     webpack: {
       cache: true,
@@ -26,8 +26,17 @@ module.exports = function (config) {
           test: /\.png/,
           loader: 'url-loader?limit=10000&mimetype=image/png'
         }, {
-          test: /\.js$/,
+          test: /\.jsx$/,
+          exclude: /node_modules/,
           loader: 'jsx-loader?harmony'
+        }, {
+          test: /\.cjsx$/,
+          exclude: /node_modules/,
+          loaders: ['coffee', 'cjsx']
+        }, {
+          test: /\.coffee$/,
+          exclude: /node_modules/,
+          loader: 'coffee'
         }, {
           test: /\.styl/,
           loader: 'style-loader!css-loader!stylus-loader'
@@ -37,9 +46,11 @@ module.exports = function (config) {
         }]
       },
       resolve: {
+        extensions: ['', '.js', '.coffee', '.cjsx'],
         alias: {
           'styles': path.join(process.cwd(), './src/styles/'),
-          'components': path.join(process.cwd(), './src/scripts/components/')
+          'components': path.join(process.cwd(), './src/scripts/components/'),
+          'config':     path.join(process.cwd(), './src/config')
         }
       }
     },

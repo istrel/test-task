@@ -7,6 +7,7 @@
 'use strict';
 
 var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
 
@@ -18,7 +19,7 @@ module.exports = {
 
   debug: false,
   devtool: false,
-  entry: './src/scripts/components/TestTaskApp.cjsx',
+  entry: './src/scripts/Main.cjsx',
 
   stats: {
     colors: true,
@@ -33,22 +34,23 @@ module.exports = {
   ],
 
   resolve: {
-    extensions: ['', '.js'],
+    extensions: ['', '.js', '.coffee', '.cjsx'],
     alias: {
-      'styles': '../../../src/styles',
-      'components': '../../../src/scripts/components/'
+      'styles':     path.resolve(__dirname, 'src/styles'),
+      'components': path.resolve(__dirname, 'src/scripts/components'),
+      'config':     path.resolve(__dirname, 'src/config')
     }
   },
 
   module: {
     preLoaders: [{
-      test: /\.js$/,
+      test: /\.jsx$/,
       exclude: /node_modules/,
       loader: 'jsxhint'
     }],
 
     loaders: [{
-      test: /\.js$/,
+      test: /\.jsx$/,
       exclude: /node_modules/,
       loader: 'jsx-loader?harmony'
     }, {

@@ -6,6 +6,7 @@
  */
 'use strict';
 var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
 
@@ -19,7 +20,7 @@ module.exports = {
   devtool: false,
   entry: [
       'webpack/hot/only-dev-server',
-      './src/scripts/components/TestTaskApp.cjsx'
+      './src/scripts/Main.cjsx'
   ],
 
   stats: {
@@ -28,20 +29,21 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['', '.js'],
+    extensions: ['', '.js', '.coffee', '.cjsx'],
     alias: {
-      'styles': '../../../src/styles',
-      'components': '../../../src/scripts/components/'
+      'styles':     path.resolve(__dirname, 'src/styles'),
+      'components': path.resolve(__dirname, 'src/scripts/components'),
+      'config':     path.resolve(__dirname, 'src/config')
     }
   },
   module: {
     preLoaders: [{
-      test: /\.js$/,
+      test: /\.jsx$/,
       exclude: /node_modules/,
       loader: 'jsxhint'
     }],
     loaders: [{
-      test: /\.js$/,
+      test: /\.jsx$/,
       exclude: /node_modules/,
       loader: 'react-hot!jsx-loader?harmony'
     }, {

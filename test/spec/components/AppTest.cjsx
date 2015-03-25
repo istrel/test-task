@@ -5,11 +5,21 @@ App           = require 'components/App'
 Map           = require 'components/Map'
 AddressesList = require 'components/AddressesList'
 
+Mediator      = require 'src/scripts/Mediator'
+
 describe 'App test', ->
   beforeEach ->
     @addresses = [
       address: 'Test address'
       latitude: 23
+      longitude: 2
+    ,
+      address: 'Too long point'
+      latitude: 73
+      longitude: 3
+    ,
+      address: 'Too long point'
+      latitude: 73
       longitude: 2
     ]
 
@@ -35,3 +45,4 @@ describe 'App test', ->
       @list = TestUtils.findRenderedComponentWithType @component, AddressesList
 
       expect( @list.props.addresses ).toBe @newAddresses
+

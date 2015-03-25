@@ -3,8 +3,8 @@ Address = require 'components/Address'
 
 AddressesList = React.createClass
   addresses: ->
-    for addr in @props.addresses
-      <Address address={ addr } />
+    for addr, idx in @props.addresses
+      <Address key={ idx } address={ addr } />
 
   render: ->
     <div className="panel panel-default">

@@ -3,12 +3,15 @@ Map           = require 'components/Map'
 addresses     = require 'src/addresses'
 AddressesList = require 'components/AddressesList'
 
-TestTaskApp = React.createClass
+App = React.createClass
+  getInitialState: ->
+    filteredAddresses: []
+
   render: ->
     <div className='container'>
-      <Map addresses={ addresses } />
+      <Map addresses={ @state.filteredAddresses } />
 
-      <AddressesList addresses={ addresses } />
+      <AddressesList addresses={ @state.filteredAddresses } />
     </div>
 
-module.exports = TestTaskApp
+module.exports = App

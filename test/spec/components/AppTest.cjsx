@@ -4,18 +4,34 @@ TestUtils   = require 'react/lib/ReactTestUtils'
 App           = require 'components/App'
 Map           = require 'components/Map'
 AddressesList = require 'components/AddressesList'
-addresses     = require 'src/addresses'
 
 describe 'App test', ->
   beforeEach ->
-    @component = TestUtils.renderIntoDocument <App />
+    @addresses = [
+      address: 'Test address'
+      latitude: 23
+      longitude: 2
+    ]
 
-  it 'renders google map with addresses', ->
-    @map = TestUtils.findRenderedComponentWithType @component, Map
+    @component = TestUtils.renderIntoDocument <App addresses={ @addresses } />
 
-    expect( @map.props.addresses ).toBe addresses
+  it 'set filtered addresses to empty array by default', ->
+    expect( @component.state.filteredAddresses ).toEqual []
 
-  it 'renders addresses list with passed addresses', ->
-    @list = TestUtils.findRenderedComponentWithType @component, AddressesList
+  describe 'and filtered addresses changed', ->
+    beforeEach ->
+      @newAddresses = [
+        address: 'Test address'
+      ]
 
-    expect( @list.props.addresses ).toBe addresses
+      @component.setState filteredAddresses: @newAddresses
+
+    it 'renders google map with filtered addresses', ->
+      @map = TestUtils.findRenderedComponentWithType @component, Map
+
+      expect( @map.props.addresses ).toBe @newAddresses
+
+    it 'renders addresses list with passed addresses', ->
+      @list = TestUtils.findRenderedComponentWithType @component, AddressesList
+
+      expect( @list.props.addresses ).toBe @newAddresses

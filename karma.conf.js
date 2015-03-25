@@ -8,10 +8,12 @@ module.exports = function (config) {
     frameworks: ['jasmine'],
     files: [
       'test/helpers/**/*.js',
-      'test/spec/components/**/*.cjsx'
+      'test/spec/**/*.cjsx',
+      'test/spec/**/*.coffee'
     ],
     preprocessors: {
-      'test/spec/components/**/*.cjsx': ['webpack']
+      'test/spec/**/*.cjsx': ['webpack'],
+      'test/spec/**/*.coffee': ['webpack']
     },
     webpack: {
       cache: true,
@@ -50,7 +52,8 @@ module.exports = function (config) {
         alias: {
           'styles': path.join(process.cwd(), './src/styles/'),
           'components': path.join(process.cwd(), './src/scripts/components/'),
-          'src':        path.resolve(__dirname, 'src'),
+          'helpers':    path.resolve(process.cwd(), 'src/scripts/helpers'),
+          'src':        path.resolve(process.cwd(), 'src'),
           'config':     path.join(process.cwd(), './src/config')
         }
       }

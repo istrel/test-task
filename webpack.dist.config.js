@@ -38,6 +38,7 @@ module.exports = {
     alias: {
       'styles':     path.resolve(__dirname, 'src/styles'),
       'components': path.resolve(__dirname, 'src/scripts/components'),
+      'helpers':    path.resolve(__dirname, 'src/scripts/helpers'),
       'src':        path.resolve(__dirname, 'src'),
       'config':     path.resolve(__dirname, 'src/config')
     }

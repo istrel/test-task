@@ -5,4 +5,4 @@ require 'styles/normalize.css'
 require 'styles/main.styl'
 require 'bootstrap-webpack!../bootstrap.config.js'
 
-React.render <App />, document.getElementById('content')
+React.render <App addresses={ addresses }/>, document.getElementById('content')

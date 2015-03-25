@@ -9,12 +9,14 @@ AddressesList = React.createClass
   render: ->
     <div className="panel panel-default">
       <table className="table">
-        <tr>
+        <thead>
           <th className="col-sm-9">Address</th>
           <th className="col-sm-3">Distance</th>
-        </tr>
+        </thead>
 
-        { @addresses() }
+        <tbody>
+          { @addresses() }
+        </tbody>
       </table>
     </div>
 

@@ -10,8 +10,10 @@ describe 'App test', ->
   beforeEach ->
     @component = TestUtils.renderIntoDocument <App />
 
-  it 'renders google map', ->
-    TestUtils.findRenderedComponentWithType @component, Map
+  it 'renders google map with points', ->
+    @map = TestUtils.findRenderedComponentWithType @component, Map
+
+    expect( @map.props.addresses ).toBe points
 
   it 'renders addresses list with points', ->
     @list = TestUtils.findRenderedComponentWithType @component, AddressesList

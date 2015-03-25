@@ -6,7 +6,7 @@ AddressesList = require 'components/AddressesList'
 TestTaskApp = React.createClass
   render: ->
     <div className='container'>
-      <Map />
+      <Map addresses={ points } />
 
       <AddressesList addresses={ points } />
     </div>

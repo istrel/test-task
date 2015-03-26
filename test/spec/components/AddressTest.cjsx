@@ -10,6 +10,11 @@ describe 'Address component', ->
 
       expect( @component.distance() ).toBe "5 m"
 
+    it 'rounds meter values', ->
+      @component = TestUtils.renderIntoDocument <Address address={ distance: 24.3 }/>
+
+      expect( @component.distance() ).toBe "24 m"
+
     it 'returns kilometers for values greater than 1000', ->
       @component = TestUtils.renderIntoDocument <Address address={ distance: 1499 }/>
 

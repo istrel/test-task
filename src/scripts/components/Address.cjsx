@@ -5,7 +5,7 @@ Address = React.createClass
     distance = @props.address.distance
 
     if distance < 1000
-      "#{ distance } m"
+      "#{ Math.round(distance) } m"
     else
       "#{ Math.round(distance / 100) / 10 } km"
 

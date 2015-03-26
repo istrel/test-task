@@ -14,8 +14,15 @@ module.exports = React.createClass
           title: addr.address
           map: @map
 
+        @mapsAPI.event.addListener @marker, 'click', @showInfoWindow
+
   componentWillUnmount: ->
     @marker.setMap null
+
+  showInfoWindow: ->
+    new @mapsAPI.InfoWindow(
+      content: @props.address.address
+    ).open(@map, @marker)
 
   render: ->
     null

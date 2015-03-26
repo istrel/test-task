@@ -3,7 +3,10 @@ TestUtils   = require 'react/lib/ReactTestUtils'
 
 config      = require 'config'
 GoogleMaps  = require 'google-maps'
-Map         = require 'components/Map.cjsx'
+Map         = require 'components/Map'
+
+Marker      = require 'components/Marker'
+Mediator    = require 'src/scripts/Mediator'
 
 describe 'Map component', ->
   beforeEach ->
@@ -11,9 +14,13 @@ describe 'Map component', ->
       Map:    jasmine.createSpy 'Map'
       LatLng: jasmine.createSpy 'LatLng'
       Marker: jasmine.createSpy 'Marker'
+      event:
+        addListener: (@evtListener, @evtName, @evtCallback) =>
 
     spyOn(GoogleMaps, 'load').and.callFake (cb) =>
       cb maps: @mapsApi
+
+    @mapsApi.Marker::setPosition = jasmine.createSpy 'setPosition'
 
     @addresses = [
       address: 'First address'
@@ -27,7 +34,11 @@ describe 'Map component', ->
 
     @component = TestUtils.renderIntoDocument <Map addresses={ @addresses } />
 
-    @mapsApiCall = @mapsApi.Map.calls.mostRecent()
+    @mapsApiCall = @mapsApi.Map.calls.first()
+
+    @map = @mapsApiCall.object
+
+    expect( @map instanceof @mapsApi.Map ).toBe true
 
   it 'loads Google API with proper public key', ->
     expect(GoogleMaps.load).toHaveBeenCalledWith jasmine.any(Function),
@@ -38,30 +49,66 @@ describe 'Map component', ->
       zoom:   jasmine.any(Number),
       center: jasmine.any(@mapsApi.LatLng)
 
-    context = @mapsApiCall.object
+  it 'creates deferred for google API', (done) ->
+    @component.apiDefer.promise.then (api) =>
+      expect(api).toBe @mapsApi
 
-    expect( context instanceof @mapsApi.Map ).toBe true
+      done()
 
-  it 'draws every address', ->
-    for addr in @addresses
-      expect( @mapsApi.LatLng ).toHaveBeenCalledWith addr.latitude, addr.longitude
+  it 'creates deferred for map', (done) ->
+    @component.mapDefer.promise.then (map) =>
+      expect(map).toBe @map
 
-  describe '#drawAddress', ->
+      done()
+
+  describe 'marker', ->
     beforeEach ->
-      @component.drawAddress
-        latitude: 12
-        longitude: 34
-        address: 'Test Address'
+      @markers = TestUtils.scryRenderedComponentsWithType @component, Marker
 
-    it 'creates LatLng object', ->
-      expect(@mapsApi.LatLng).toHaveBeenCalledWith 12, 34
+    it 'has address', ->
+      for addr, idx in @addresses
+        marker = @markers[ idx ]
 
-    it 'creates marker for created LatLng object', ->
-      expect(@mapsApi.Marker).toHaveBeenCalledWith
-        position: jasmine.any(@mapsApi.LatLng)
-        map: jasmine.any(@mapsApi.Map)
-        title: 'Test Address'
+        expect( marker.props.address ).toBe addr
 
-      context = @mapsApi.Marker.calls.mostRecent().object
+    it 'has map promise', ->
+      for marker in @markers
+        expect( marker.props.mapPromise ).toBe @component.mapDefer.promise
 
-      expect( context instanceof @mapsApi.Marker ).toBe true
+    it 'has api promise', ->
+      for marker in @markers
+        expect( marker.props.apiPromise ).toBe @component.apiDefer.promise
+
+  describe 'on click', ->
+    beforeEach ->
+      @latLng =
+        lat: -> 2
+        lng: -> 3
+
+      @evtCallback { @latLng }
+
+    it 'reacts only on map click events', ->
+      expect(@evtListener).toBe @map
+      expect(@evtName).toBe 'click'
+
+    it 'renders marker', ->
+      expect( @mapsApi.Marker ).toHaveBeenCalledWith
+        position: @latLng
+        map: @map
+
+    it 'emits change event', (done) ->
+      Mediator.once 'setPosition', ({ latitude, longitude }) =>
+        expect( latitude ).toBe @latLng.lat()
+        expect( longitude ).toBe @latLng.lng()
+
+        done()
+
+      @evtCallback { @latLng }
+
+
+    it 'reposition marker on second click', ->
+      expect( @mapsApi.Marker::setPosition ).not.toHaveBeenCalled()
+
+      @evtCallback { @latLng }
+
+      expect( @mapsApi.Marker::setPosition ).toHaveBeenCalledWith @latLng

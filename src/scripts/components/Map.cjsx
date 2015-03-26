@@ -32,6 +32,9 @@ Map = React.createClass
       @marker = new @mapsAPI.Marker
         position: position
         map: @map
+        icon:
+          path: @mapsAPI.SymbolPath.CIRCLE
+          scale: 3
 
     Mediator.emit 'setPosition', { latitude, longitude }
 

@@ -16,6 +16,7 @@ describe 'Map component', ->
       Marker: jasmine.createSpy 'Marker'
       event:
         addListener: (@evtListener, @evtName, @evtCallback) =>
+      SymbolPath: {}
 
     spyOn(GoogleMaps, 'load').and.callFake (cb) =>
       cb maps: @mapsApi
@@ -95,6 +96,7 @@ describe 'Map component', ->
       expect( @mapsApi.Marker ).toHaveBeenCalledWith
         position: @latLng
         map: @map
+        icon: jasmine.any(Object)
 
     it 'emits change event', (done) ->
       Mediator.once 'setPosition', ({ latitude, longitude }) =>

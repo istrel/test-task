@@ -41,7 +41,7 @@ Map = React.createClass
   markers: ->
     for addr, idx in @props.addresses
       <Marker
-        key={ idx }
+        key={ addr.id }
         address={ addr }
         mapPromise={ @mapDefer.promise }
         apiPromise={ @apiDefer.promise }

@@ -1,11 +1,13 @@
 React       = require 'react'
 TestUtils   = require 'react/lib/ReactTestUtils'
+_           = require 'underscore'
 
 App           = require 'components/App'
 Map           = require 'components/Map'
 AddressesList = require 'components/AddressesList'
 
 Mediator      = require 'src/scripts/Mediator'
+PolarDistance = require 'helpers/PolarDistance'
 
 describe 'App test', ->
   beforeEach ->
@@ -16,11 +18,11 @@ describe 'App test', ->
     ,
       address: 'Too long point'
       latitude: 73
-      longitude: 3
+      longitude: 2.3
     ,
       address: 'Too long point'
       latitude: 73
-      longitude: 2
+      longitude: 2.2
     ]
 
     @component = TestUtils.renderIntoDocument <App addresses={ @addresses } />
@@ -28,10 +30,30 @@ describe 'App test', ->
   it 'set filtered addresses to empty array by default', ->
     expect( @component.state.filteredAddresses ).toEqual []
 
+  describe 'and new position set', ->
+    beforeEach ->
+      # set position between last two points
+      Mediator.emit 'setPosition',
+        latitude: 73
+        longitude: 2.25
+
+    it 'set state with new addresses', ->
+      expect( @component.state.filteredAddresses ).toEqual(
+        _(@addresses)
+          .chain()
+          .map( (a, id) ->
+            distance = PolarDistance [73, 2.25], [a.latitude, a.longitude]
+            _.extend { id, distance }, a
+          )
+          .rest()
+          .value()
+      )
+
   describe 'and filtered addresses changed', ->
     beforeEach ->
       @newAddresses = [
         address: 'Test address'
+        id: 6
       ]
 
       @component.setState filteredAddresses: @newAddresses

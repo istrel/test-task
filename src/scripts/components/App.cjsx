@@ -11,14 +11,14 @@ App = React.createClass
     Mediator.on 'setPosition', (point) =>
       filteredAddresses = []
 
-      for addr in @props.addresses
+      for addr, id in @props.addresses
         distance = PolarDistance(
           [ point.latitude, point.longitude ]
           [ addr.latitude, addr.longitude ]
         )
 
         if distance < config.searchRadius
-          filteredAddresses.push _({ distance }).extend addr
+          filteredAddresses.push _({ distance, id }).extend addr
 
       @setState { filteredAddresses }
 

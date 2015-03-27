@@ -27,10 +27,12 @@ describe 'Map component', ->
       address: 'First address'
       latitude: 0
       longitude: 1
+      id: 1
     ,
       address: 'Second address'
       latitude: 2
       longitude: 3
+      id: 4
     ]
 
     @component = TestUtils.renderIntoDocument <Map addresses={ @addresses } />
